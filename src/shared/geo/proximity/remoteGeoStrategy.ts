@@ -1,13 +1,36 @@
+import { geoClient } from '../../api/geoClient';
+import { haversineStrategy } from './haversineStrategy';
 import type { ProximitySortStrategy } from './ProximitySortStrategy';
 
+interface OrdenarResponse {
+  postos: Array<{ id: string; distanciaKm: number }>;
+}
+
 /**
- * Stub para quando o postoradar-geo (serviço do Victor) existir. Troca-se
- * a implementação ativa só em `index.ts` — nenhuma tela precisa mudar.
- * Implementação futura provavelmente chama `POST /geo/ordenar` (ver
- * postoradar-infra/docs/04-planejamento.md) em vez de calcular localmente.
+ * Consome o postoradar-geo (POST /geo/ordenar): manda a localização do
+ * usuário + {id, latitude, longitude} de cada posto, recebe de volta a
+ * distância (`distanciaKm`) por id e reordena localmente por ela.
+ *
+ * Se o serviço estiver fora do ar, cai para o cálculo local (haversineStrategy)
+ * em vez de quebrar a busca por proximidade.
  */
 export const remoteGeoStrategy: ProximitySortStrategy = {
-  async sortByProximity() {
-    throw new Error('remoteGeoStrategy ainda não implementada — postoradar-geo não existe.');
+  async sortByProximity(userLocation, items) {
+    try {
+      const { data } = await geoClient.post<OrdenarResponse>('/geo/ordenar', {
+        latitude: userLocation.latitude,
+        longitude: userLocation.longitude,
+        postos: items.map(({ id, latitude, longitude }) => ({ id, latitude, longitude })),
+      });
+
+      const distanciaPorId = new Map(data.postos.map((posto) => [posto.id, posto.distanciaKm]));
+
+      return items
+        .map((item) => ({ ...item, distanceKm: distanciaPorId.get(item.id) ?? Number.POSITIVE_INFINITY }))
+        .sort((a, b) => a.distanceKm - b.distanceKm);
+    } catch (err) {
+      console.warn('postoradar-geo indisponível, usando cálculo local de proximidade.', err);
+      return haversineStrategy.sortByProximity(userLocation, items);
+    }
   },
 };
