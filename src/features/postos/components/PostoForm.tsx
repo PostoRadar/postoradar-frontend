@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ApiError } from '../../../shared/api/httpError';
 import { Button } from '../../../shared/components/Button';
 import { ErrorBanner } from '../../../shared/components/ErrorBanner';
@@ -17,6 +17,10 @@ export function PostoForm() {
   const navigate = useNavigate();
   const { location: userLocation, requestLocation, status } = useUserLocation();
   const [formError, setFormError] = useState<string | null>(null);
+  // UC09-A1: quando já existe um posto na mesma localização, a API retorna
+  // 409 posto_duplicado com o id do posto existente em `details` — usamos
+  // pra sugerir ir atualizar o preço dele em vez de insistir no cadastro.
+  const [postoDuplicadoId, setPostoDuplicadoId] = useState<string | null>(null);
 
   const {
     register,
@@ -48,13 +52,21 @@ export function PostoForm() {
 
   const onSubmit = async (data: CriarPostoInput) => {
     setFormError(null);
+    setPostoDuplicadoId(null);
     try {
       // Input HTML sempre manda '' para o CEP vazio; o backend só aceita o
       // campo ausente ou casando o regex, nunca string vazia.
       const posto = await mutation.mutateAsync({ ...data, cep: data.cep || undefined });
       navigate(`/postos/${posto.id}`);
     } catch (err) {
-      if (err instanceof ApiError && err.fieldErrors.length > 0) {
+      if (err instanceof ApiError && err.code === 'posto_duplicado') {
+        const { postoExistenteId } = (err.details as { postoExistenteId?: string } | undefined) ?? {};
+        if (postoExistenteId) {
+          setPostoDuplicadoId(postoExistenteId);
+        } else {
+          setFormError(err.message);
+        }
+      } else if (err instanceof ApiError && err.fieldErrors.length > 0) {
         for (const fe of err.fieldErrors) {
           setError(fe.campo as keyof CriarPostoInput, { message: fe.mensagem });
         }
@@ -69,6 +81,22 @@ export function PostoForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
       {formError && <ErrorBanner message={formError} />}
+      {postoDuplicadoId && (
+        <div
+          className="card"
+          style={{
+            borderColor: 'var(--brand-radar)',
+            background: 'var(--brand-radar-soft)',
+            marginBottom: 16,
+            padding: 16,
+          }}
+        >
+          <p style={{ marginBottom: 8 }}>Já existe um posto cadastrado bem nesta localização.</p>
+          <Link to={`/postos/${postoDuplicadoId}`} className="btn" style={{ width: 'fit-content' }}>
+            Ver posto existente e atualizar preço
+          </Link>
+        </div>
+      )}
       <FormField label="Nome do posto" error={errors.nome?.message} {...register('nome')} />
       <FormField label="Bandeira" error={errors.bandeira?.message} {...register('bandeira')} />
       <FormField label="Endereço" error={errors.endereco?.message} {...register('endereco')} />
