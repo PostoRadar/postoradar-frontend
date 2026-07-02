@@ -52,7 +52,7 @@ export function PostoDetailPage() {
                 }}
               >
                 <span>{COMBUSTIVEL_LABELS[preco.combustivel]}</span>
-                <strong>{formatBRL(Number(preco.valor))}</strong>
+                <span className="price-tag">{formatBRL(Number(preco.valor))}</span>
               </li>
             ))}
           </ul>

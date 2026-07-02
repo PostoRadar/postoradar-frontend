@@ -15,7 +15,13 @@ export function PostoMarker({ posto }: { posto: Posto }) {
         <br />
         {posto.bandeira} · {posto.bairro}
         <br />
-        {menorPreco !== null ? `A partir de ${formatBRL(menorPreco)}` : 'Sem preços cadastrados'}
+        {menorPreco !== null ? (
+          <>
+            A partir de <span className="price-tag">{formatBRL(menorPreco)}</span>
+          </>
+        ) : (
+          'Sem preços cadastrados'
+        )}
         <br />
         <Link to={`/postos/${posto.id}`}>Ver detalhes</Link>
       </Popup>

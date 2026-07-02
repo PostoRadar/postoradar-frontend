@@ -16,7 +16,7 @@ const INITIAL_FILTROS: PostoFiltrosUI = {
   ordenarPor: 'recentes',
 };
 
-export function HomePage() {
+export function BuscarPage() {
   const [filtros, setFiltros] = useState<PostoFiltrosUI>(INITIAL_FILTROS);
   const { location: userLocation } = useUserLocation();
 
@@ -50,7 +50,15 @@ export function HomePage() {
     <div>
       <PostoFilterBar filtros={filtros} onChange={setFiltros} />
       <div style={{ display: 'flex', gap: 16, padding: 16, flexWrap: 'wrap' }}>
-        <div style={{ flex: '1 1 400px', minHeight: 420 }}>
+        <div
+          style={{
+            flex: '1 1 400px',
+            minHeight: 420,
+            borderRadius: 16,
+            overflow: 'hidden',
+            border: '1px solid var(--border)',
+          }}
+        >
           <MapView postos={postosExibidos} userLocation={userLocation} />
         </div>
         <div style={{ flex: '1 1 320px', maxWidth: 420 }}>

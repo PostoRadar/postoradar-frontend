@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
-import { HomePage } from '../pages/home/HomePage';
+import { BuscarPage } from '../pages/buscar/BuscarPage';
+import { LandingPage } from '../pages/landing/LandingPage';
 import { LoginPage } from '../pages/login/LoginPage';
 import { PostoDetailPage } from '../pages/posto-detail/PostoDetailPage';
 import { PostoNewPage } from '../pages/posto-new/PostoNewPage';
@@ -12,7 +13,8 @@ export const router = createBrowserRouter([
     path: '/',
     element: <AppLayout />,
     children: [
-      { index: true, element: <HomePage /> },
+      { index: true, element: <LandingPage /> },
+      { path: 'buscar', element: <BuscarPage /> },
       { path: 'login', element: <LoginPage /> },
       { path: 'cadastro', element: <RegisterPage /> },
       { path: 'postos/:id', element: <PostoDetailPage /> },

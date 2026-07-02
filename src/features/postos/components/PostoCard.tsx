@@ -20,8 +20,14 @@ export function PostoCard({ posto }: { posto: Posto | PostoComDistancia }) {
         {posto.bandeira} · {posto.bairro}, {posto.cidade}
       </p>
       <p style={{ marginTop: 8 }}>
-        {menorPreco !== null ? `A partir de ${formatBRL(menorPreco)}` : 'Sem preços cadastrados'}
-        {distanceKm !== null && ` · ${distanceKm.toFixed(1)} km`}
+        {menorPreco !== null ? (
+          <>
+            A partir de <span className="price-tag">{formatBRL(menorPreco)}</span>
+          </>
+        ) : (
+          <span className="muted">Sem preços cadastrados</span>
+        )}
+        {distanceKm !== null && <span className="muted"> · {distanceKm.toFixed(1)} km</span>}
       </p>
     </Link>
   );
