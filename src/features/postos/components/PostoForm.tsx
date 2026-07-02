@@ -8,6 +8,7 @@ import { ErrorBanner } from '../../../shared/components/ErrorBanner';
 import { FormField } from '../../../shared/components/FormField';
 import { useUserLocation } from '../../../shared/geo/context/GeoLocationContext';
 import { COMBUSTIVEL_LABELS, COMBUSTIVEL_OPTIONS } from '../../../shared/utils/enums';
+import { CoordinatePreviewMap } from '../../map/components/CoordinatePreviewMap';
 import { useCriarPostoMutation } from '../api/postos.queries';
 import { criarPostoFormSchema, type CriarPostoInput } from '../schemas/postos.schemas';
 
@@ -23,6 +24,7 @@ export function PostoForm() {
     control,
     setValue,
     setError,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<CriarPostoInput>({
     resolver: zodResolver(criarPostoFormSchema),
@@ -30,6 +32,10 @@ export function PostoForm() {
   });
 
   const { fields, append, remove } = useFieldArray({ control, name: 'precos' });
+
+  const latitude = watch('latitude');
+  const longitude = watch('longitude');
+  const temCoordenadasValidas = Number.isFinite(latitude) && Number.isFinite(longitude);
 
   const usarMinhaLocalizacao = () => {
     if (userLocation) {
@@ -90,6 +96,15 @@ export function PostoForm() {
       <Button type="button" variant="secondary" onClick={usarMinhaLocalizacao} style={{ marginBottom: 16 }}>
         {status === 'loading' ? 'Obtendo localização...' : 'Usar minha localização'}
       </Button>
+
+      {temCoordenadasValidas && (
+        <>
+          <p className="muted" style={{ marginBottom: 8 }}>
+            Confira se o pino está no lugar certo antes de salvar:
+          </p>
+          <CoordinatePreviewMap latitude={latitude} longitude={longitude} />
+        </>
+      )}
 
       <h3>Preços iniciais (opcional)</h3>
       {fields.map((field, index) => (
