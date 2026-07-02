@@ -1,0 +1,30 @@
+import { apiClient } from '../../../shared/api/apiClient';
+import { toApiError } from '../../../shared/api/httpError';
+import type { ListarPostosFiltros, Posto, Preco } from '../types/postos.types';
+
+export async function listarPostos(filtros: ListarPostosFiltros): Promise<Posto[]> {
+  try {
+    const { data } = await apiClient.get<Posto[]>('/postos', { params: filtros });
+    return data;
+  } catch (err) {
+    throw toApiError(err);
+  }
+}
+
+export async function buscarPosto(id: string): Promise<Posto> {
+  try {
+    const { data } = await apiClient.get<Posto>(`/postos/${id}`);
+    return data;
+  } catch (err) {
+    throw toApiError(err);
+  }
+}
+
+export async function listarPrecos(postoId: string): Promise<Preco[]> {
+  try {
+    const { data } = await apiClient.get<Preco[]>(`/postos/${postoId}/precos`);
+    return data;
+  } catch (err) {
+    throw toApiError(err);
+  }
+}
