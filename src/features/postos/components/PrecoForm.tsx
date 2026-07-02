@@ -46,25 +46,28 @@ export function PrecoForm({ postoId, onSuccess }: { postoId: string; onSuccess?:
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
       {formError && <ErrorBanner message={formError} />}
-      <FormField label="Combustível" error={errors.combustivel?.message}>
-        <select id="combustivel" {...register('combustivel')}>
-          {COMBUSTIVEL_OPTIONS.map((c) => (
-            <option key={c} value={c}>
-              {COMBUSTIVEL_LABELS[c]}
-            </option>
-          ))}
-        </select>
-      </FormField>
-      <FormField
-        label="Novo preço (R$)"
-        type="number"
-        step="0.01"
-        min={1}
-        max={15}
-        error={errors.valor?.message}
-        {...register('valor', { valueAsNumber: true })}
-      />
-      <Button type="submit" disabled={isSubmitting}>
+      <div className="form-grid-2">
+        <FormField label="Combustível" error={errors.combustivel?.message}>
+          <select id="combustivel" {...register('combustivel')}>
+            {COMBUSTIVEL_OPTIONS.map((c) => (
+              <option key={c} value={c}>
+                {COMBUSTIVEL_LABELS[c]}
+              </option>
+            ))}
+          </select>
+        </FormField>
+        <FormField
+          label="Novo preço (R$)"
+          type="number"
+          step="0.01"
+          min={1}
+          max={15}
+          placeholder="0,00"
+          error={errors.valor?.message}
+          {...register('valor', { valueAsNumber: true })}
+        />
+      </div>
+      <Button type="submit" disabled={isSubmitting} style={{ width: '100%' }}>
         {isSubmitting ? 'Atualizando...' : 'Atualizar preço'}
       </Button>
     </form>

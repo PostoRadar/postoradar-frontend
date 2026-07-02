@@ -49,7 +49,7 @@ export function AppLayout() {
           )}
         </nav>
       </header>
-      <main style={{ flex: 1 }}>
+      <main style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
         <Outlet />
       </main>
     </div>

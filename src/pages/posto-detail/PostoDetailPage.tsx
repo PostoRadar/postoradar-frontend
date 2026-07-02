@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useAuth } from '../../features/auth/context/AuthContext';
 import { usePostoQuery } from '../../features/postos/api/postos.queries';
 import { PrecoForm } from '../../features/postos/components/PrecoForm';
@@ -18,7 +18,7 @@ export function PostoDetailPage() {
 
   if (isError) {
     return (
-      <div className="container">
+      <div className="detail-shell">
         <ErrorBanner message={error instanceof Error ? error.message : 'Erro ao carregar posto.'} />
       </div>
     );
@@ -29,46 +29,53 @@ export function PostoDetailPage() {
   }
 
   return (
-    <div className="container" style={{ maxWidth: 640 }}>
-      <div className="card">
-        <h1>{posto.nome}</h1>
-        <p className="muted">
-          {posto.bandeira} · {posto.endereco}, {posto.bairro} — {posto.cidade}/{posto.estado}
-        </p>
+    <div className="detail-shell">
+      <Link to="/buscar" className="back-link">
+        ← Voltar pra busca
+      </Link>
 
-        <h2 style={{ marginTop: 24 }}>Preços</h2>
-        {posto.precos.length === 0 ? (
-          <p className="muted">Sem preços cadastrados ainda.</p>
+      <span className="badge">{posto.bandeira}</span>
+      <h1 className="detail-hero-title">{posto.nome}</h1>
+      <p className="detail-address">
+        📍 {posto.endereco}, {posto.bairro} — {posto.cidade}/{posto.estado}
+      </p>
+
+      <div className="detail-grid">
+        <section className="card">
+          <h2>Preços</h2>
+          {posto.precos.length === 0 ? (
+            <p className="muted" style={{ marginTop: 12 }}>
+              Sem preços cadastrados ainda.
+            </p>
+          ) : (
+            <div className="price-grid">
+              {posto.precos.map((preco) => (
+                <div key={preco.id} className="price-card">
+                  <div className="price-card-label">{COMBUSTIVEL_LABELS[preco.combustivel]}</div>
+                  <div className="price-card-value">{formatBRL(Number(preco.valor))}</div>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+
+        {isAuthenticated ? (
+          <section className="card panel-highlight">
+            <h2>Atualizar preço</h2>
+            <p className="muted" style={{ marginBottom: 16 }}>
+              Chegou aqui e o preço tá diferente? Atualize pra ajudar quem vem depois.
+            </p>
+            <PrecoForm postoId={posto.id} />
+          </section>
         ) : (
-          <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-            {posto.precos.map((preco) => (
-              <li
-                key={preco.id}
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  padding: '8px 0',
-                  borderBottom: '1px solid var(--border)',
-                }}
-              >
-                <span>{COMBUSTIVEL_LABELS[preco.combustivel]}</span>
-                <span className="price-tag">{formatBRL(Number(preco.valor))}</span>
-              </li>
-            ))}
-          </ul>
+          <section className="card">
+            <h2>Atualizar preço</h2>
+            <p className="muted" style={{ marginTop: 12 }}>
+              <Link to="/login">Entre na sua conta</Link> para atualizar o preço deste posto.
+            </p>
+          </section>
         )}
       </div>
-
-      {isAuthenticated ? (
-        <div className="card" style={{ marginTop: 16 }}>
-          <h2>Atualizar preço</h2>
-          <PrecoForm postoId={posto.id} />
-        </div>
-      ) : (
-        <p className="muted" style={{ marginTop: 16 }}>
-          Entre na sua conta para atualizar o preço deste posto.
-        </p>
-      )}
     </div>
   );
 }

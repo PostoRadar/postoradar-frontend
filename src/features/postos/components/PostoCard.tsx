@@ -10,25 +10,24 @@ export function PostoCard({ posto }: { posto: Posto | PostoComDistancia }) {
   const distanceKm = 'distanceKm' in posto ? posto.distanceKm : null;
 
   return (
-    <Link
-      to={`/postos/${posto.id}`}
-      className="card"
-      style={{ display: 'block', textDecoration: 'none', color: 'inherit', marginBottom: 12 }}
-    >
-      <h3 style={{ marginBottom: 4 }}>{posto.nome}</h3>
-      <p className="muted">
+    <Link to={`/postos/${posto.id}`} className="posto-card">
+      <div className="posto-card-top">
+        <h3 className="posto-card-name">{posto.nome}</h3>
+        {distanceKm !== null && <span className="posto-card-distance">📍 {distanceKm.toFixed(1)} km</span>}
+      </div>
+      <p className="posto-card-meta">
         {posto.bandeira} · {posto.bairro}, {posto.cidade}
       </p>
-      <p style={{ marginTop: 8 }}>
+      <div className="posto-card-bottom">
         {menorPreco !== null ? (
           <>
-            A partir de <span className="price-tag">{formatBRL(menorPreco)}</span>
+            <span className="muted">A partir de</span>
+            <span className="posto-card-price">{formatBRL(menorPreco)}</span>
           </>
         ) : (
           <span className="muted">Sem preços cadastrados</span>
         )}
-        {distanceKm !== null && <span className="muted"> · {distanceKm.toFixed(1)} km</span>}
-      </p>
+      </div>
     </Link>
   );
 }

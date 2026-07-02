@@ -82,92 +82,97 @@ export function PostoForm() {
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
       {formError && <ErrorBanner message={formError} />}
       {postoDuplicadoId && (
-        <div
-          className="card"
-          style={{
-            borderColor: 'var(--brand-radar)',
-            background: 'var(--brand-radar-soft)',
-            marginBottom: 16,
-            padding: 16,
-          }}
-        >
+        <div className="card panel-highlight" style={{ marginBottom: 24, padding: 16 }}>
           <p style={{ marginBottom: 8 }}>Já existe um posto cadastrado bem nesta localização.</p>
           <Link to={`/postos/${postoDuplicadoId}`} className="btn" style={{ width: 'fit-content' }}>
             Ver posto existente e atualizar preço
           </Link>
         </div>
       )}
-      <FormField label="Nome do posto" error={errors.nome?.message} {...register('nome')} />
-      <FormField label="Bandeira" error={errors.bandeira?.message} {...register('bandeira')} />
-      <FormField label="Endereço" error={errors.endereco?.message} {...register('endereco')} />
-      <FormField label="Bairro" error={errors.bairro?.message} {...register('bairro')} />
-      <FormField label="Cidade" error={errors.cidade?.message} {...register('cidade')} />
-      <FormField label="Estado (UF)" maxLength={2} error={errors.estado?.message} {...register('estado')} />
-      <FormField label="CEP (opcional)" error={errors.cep?.message} {...register('cep')} />
 
-      <div style={{ display: 'flex', gap: 12 }}>
-        <FormField
-          label="Latitude"
-          type="number"
-          step="any"
-          error={errors.latitude?.message}
-          {...register('latitude', { valueAsNumber: true })}
-        />
-        <FormField
-          label="Longitude"
-          type="number"
-          step="any"
-          error={errors.longitude?.message}
-          {...register('longitude', { valueAsNumber: true })}
-        />
-      </div>
-      <Button type="button" variant="secondary" onClick={usarMinhaLocalizacao} style={{ marginBottom: 16 }}>
-        {status === 'loading' ? 'Obtendo localização...' : 'Usar minha localização'}
-      </Button>
-
-      {temCoordenadasValidas && (
-        <>
-          <p className="muted" style={{ marginBottom: 8 }}>
-            Confira se o pino está no lugar certo antes de salvar:
-          </p>
-          <CoordinatePreviewMap latitude={latitude} longitude={longitude} />
-        </>
-      )}
-
-      <h3>Preços iniciais (opcional)</h3>
-      {fields.map((field, index) => (
-        <div key={field.id} style={{ display: 'flex', gap: 12, alignItems: 'flex-end' }}>
-          <FormField label="Combustível" error={errors.precos?.[index]?.combustivel?.message}>
-            <select {...register(`precos.${index}.combustivel` as const)}>
-              {COMBUSTIVEL_OPTIONS.map((c) => (
-                <option key={c} value={c}>
-                  {COMBUSTIVEL_LABELS[c]}
-                </option>
-              ))}
-            </select>
-          </FormField>
-          <FormField
-            label="Preço (R$)"
-            type="number"
-            step="0.01"
-            error={errors.precos?.[index]?.valor?.message}
-            {...register(`precos.${index}.valor` as const, { valueAsNumber: true })}
-          />
-          <Button type="button" variant="secondary" onClick={() => remove(index)} style={{ marginBottom: 16 }}>
-            Remover
-          </Button>
+      <div className="form-section">
+        <h3 className="form-section-title">🏪 Dados do posto</h3>
+        <FormField label="Nome do posto" error={errors.nome?.message} {...register('nome')} />
+        <FormField label="Bandeira" error={errors.bandeira?.message} {...register('bandeira')} />
+        <FormField label="Endereço" error={errors.endereco?.message} {...register('endereco')} />
+        <div className="form-grid-2">
+          <FormField label="Bairro" error={errors.bairro?.message} {...register('bairro')} />
+          <FormField label="Cidade" error={errors.cidade?.message} {...register('cidade')} />
         </div>
-      ))}
-      {errors.precos?.root && <span className="field-error">{errors.precos.root.message}</span>}
-      <Button
-        type="button"
-        variant="secondary"
-        onClick={() => append({ combustivel: COMBUSTIVEL_OPTIONS[0], valor: 0 })}
-        disabled={fields.length >= 6}
-        style={{ marginBottom: 24 }}
-      >
-        + Adicionar preço
-      </Button>
+        <div className="form-grid-2">
+          <FormField label="Estado (UF)" maxLength={2} error={errors.estado?.message} {...register('estado')} />
+          <FormField label="CEP (opcional)" error={errors.cep?.message} {...register('cep')} />
+        </div>
+      </div>
+
+      <div className="form-section">
+        <h3 className="form-section-title">📍 Localização no mapa</h3>
+        <div className="form-grid-2">
+          <FormField
+            label="Latitude"
+            type="number"
+            step="any"
+            error={errors.latitude?.message}
+            {...register('latitude', { valueAsNumber: true })}
+          />
+          <FormField
+            label="Longitude"
+            type="number"
+            step="any"
+            error={errors.longitude?.message}
+            {...register('longitude', { valueAsNumber: true })}
+          />
+        </div>
+        <Button type="button" variant="secondary" onClick={usarMinhaLocalizacao} style={{ marginBottom: 16 }}>
+          {status === 'loading' ? 'Obtendo localização...' : '📡 Usar minha localização'}
+        </Button>
+
+        {temCoordenadasValidas && (
+          <>
+            <p className="muted" style={{ marginBottom: 8 }}>
+              Confira se o pino está no lugar certo antes de salvar:
+            </p>
+            <CoordinatePreviewMap latitude={latitude} longitude={longitude} />
+          </>
+        )}
+      </div>
+
+      <div className="form-section">
+        <h3 className="form-section-title">⛽ Preços iniciais (opcional)</h3>
+        {fields.map((field, index) => (
+          <div key={field.id} className="preco-row">
+            <FormField label="Combustível" error={errors.precos?.[index]?.combustivel?.message}>
+              <select {...register(`precos.${index}.combustivel` as const)}>
+                {COMBUSTIVEL_OPTIONS.map((c) => (
+                  <option key={c} value={c}>
+                    {COMBUSTIVEL_LABELS[c]}
+                  </option>
+                ))}
+              </select>
+            </FormField>
+            <FormField
+              label="Preço (R$)"
+              type="number"
+              step="0.01"
+              placeholder="0,00"
+              error={errors.precos?.[index]?.valor?.message}
+              {...register(`precos.${index}.valor` as const, { valueAsNumber: true })}
+            />
+            <Button type="button" variant="secondary" onClick={() => remove(index)}>
+              Remover
+            </Button>
+          </div>
+        ))}
+        {errors.precos?.root && <span className="field-error">{errors.precos.root.message}</span>}
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={() => append({ combustivel: COMBUSTIVEL_OPTIONS[0], valor: 0 })}
+          disabled={fields.length >= 6}
+        >
+          + Adicionar preço
+        </Button>
+      </div>
 
       <Button type="submit" disabled={isSubmitting} style={{ width: '100%' }}>
         {isSubmitting ? 'Cadastrando...' : 'Cadastrar posto'}

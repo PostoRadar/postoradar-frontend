@@ -43,15 +43,15 @@ export function PostoFilterBar({ filtros, onChange }: PostoFilterBarProps) {
       </span>
 
       <div className="field">
-        <label htmlFor="cidade">Cidade</label>
+        <label htmlFor="cidade">📍 Cidade</label>
         <input id="cidade" value={filtros.cidade} onChange={handleChange('cidade')} placeholder="Ex: Recife" />
       </div>
       <div className="field">
-        <label htmlFor="bandeira">Bandeira</label>
+        <label htmlFor="bandeira">🏷️ Bandeira</label>
         <input id="bandeira" value={filtros.bandeira} onChange={handleChange('bandeira')} placeholder="Ex: Shell" />
       </div>
       <div className="field">
-        <label htmlFor="combustivel">Combustível</label>
+        <label htmlFor="combustivel">⛽ Combustível</label>
         <select id="combustivel" value={filtros.combustivel} onChange={handleChange('combustivel')}>
           <option value="">Todos</option>
           {COMBUSTIVEL_OPTIONS.map((c) => (
@@ -62,7 +62,7 @@ export function PostoFilterBar({ filtros, onChange }: PostoFilterBarProps) {
         </select>
       </div>
       <div className="field">
-        <label htmlFor="ordenarPor">Ordenar por</label>
+        <label htmlFor="ordenarPor">↕️ Ordenar por</label>
         <select id="ordenarPor" value={filtros.ordenarPor} onChange={handleChange('ordenarPor')}>
           <option value="recentes">Mais recentes</option>
           {/* Regra do backend (listarPostosQuerySchema): 'preco' exige combustível. */}

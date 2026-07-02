@@ -47,27 +47,17 @@ export function BuscarPage() {
   const postosExibidos = filtros.ordenarPor === 'proximidade' && proximitySorted ? proximitySorted : postos ?? [];
 
   return (
-    <div>
+    <div className="search-shell">
       <PostoFilterBar filtros={filtros} onChange={setFiltros} />
-      <div style={{ display: 'flex', gap: 16, padding: 16, flexWrap: 'wrap' }}>
-        <div
-          style={{
-            flex: '1 1 400px',
-            minHeight: 420,
-            borderRadius: 16,
-            overflow: 'hidden',
-            border: '1px solid var(--border)',
-          }}
-        >
+      <div className="search-results">
+        <div className="map-stage">
           <MapView postos={postosExibidos} userLocation={userLocation} />
         </div>
-        <div style={{ flex: '1 1 320px', maxWidth: 420 }}>
-          {isLoading && <Spinner label="Carregando postos..." />}
-          {isError && (
-            <ErrorBanner message={error instanceof Error ? error.message : 'Erro ao carregar postos.'} />
-          )}
-          {!isLoading && !isError && <PostoList postos={postosExibidos} />}
-        </div>
+        {isLoading && <Spinner label="Carregando postos..." />}
+        {isError && (
+          <ErrorBanner message={error instanceof Error ? error.message : 'Erro ao carregar postos.'} />
+        )}
+        {!isLoading && !isError && <PostoList postos={postosExibidos} />}
       </div>
     </div>
   );
