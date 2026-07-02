@@ -1,5 +1,7 @@
 import { useParams } from 'react-router-dom';
+import { useAuth } from '../../features/auth/context/AuthContext';
 import { usePostoQuery } from '../../features/postos/api/postos.queries';
+import { PrecoForm } from '../../features/postos/components/PrecoForm';
 import { ErrorBanner } from '../../shared/components/ErrorBanner';
 import { Spinner } from '../../shared/components/Spinner';
 import { formatBRL } from '../../shared/utils/currency';
@@ -7,6 +9,7 @@ import { COMBUSTIVEL_LABELS } from '../../shared/utils/enums';
 
 export function PostoDetailPage() {
   const { id } = useParams<{ id: string }>();
+  const { isAuthenticated } = useAuth();
   const { data: posto, isLoading, isError, error } = usePostoQuery(id);
 
   if (isLoading) {
@@ -55,6 +58,17 @@ export function PostoDetailPage() {
           </ul>
         )}
       </div>
+
+      {isAuthenticated ? (
+        <div className="card" style={{ marginTop: 16 }}>
+          <h2>Atualizar preço</h2>
+          <PrecoForm postoId={posto.id} />
+        </div>
+      ) : (
+        <p className="muted" style={{ marginTop: 16 }}>
+          Entre na sua conta para atualizar o preço deste posto.
+        </p>
+      )}
     </div>
   );
 }
