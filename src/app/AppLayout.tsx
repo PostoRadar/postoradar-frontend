@@ -22,6 +22,7 @@ export function AppLayout() {
         <nav style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
           {isAuthenticated ? (
             <>
+              <Link to="/postos/novo">Cadastrar posto</Link>
               <span className="muted">{user?.name}</span>
               <button className="btn btn-secondary" onClick={() => void logout()}>
                 Sair

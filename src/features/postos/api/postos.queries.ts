@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import * as postosApi from './postos.api';
-import type { AtualizarPrecoInput } from '../schemas/postos.schemas';
+import type { AtualizarPrecoInput, CriarPostoInput } from '../schemas/postos.schemas';
 import type { ListarPostosFiltros } from '../types/postos.types';
 
 export function usePostosQuery(filtros: ListarPostosFiltros) {
@@ -25,6 +25,16 @@ export function useAtualizarPrecoMutation(postoId: string) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['postos'] });
       queryClient.invalidateQueries({ queryKey: ['postos', postoId] });
+    },
+  });
+}
+
+export function useCriarPostoMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (input: CriarPostoInput) => postosApi.criarPosto(input),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['postos'] });
     },
   });
 }
