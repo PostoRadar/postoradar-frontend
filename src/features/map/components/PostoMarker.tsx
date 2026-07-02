@@ -2,6 +2,7 @@ import { Marker, Popup } from 'react-leaflet';
 import { Link } from 'react-router-dom';
 import { formatBRL } from '../../../shared/utils/currency';
 import type { Posto } from '../../postos/types/postos.types';
+import { postoIcon } from '../markerIcons';
 
 export function PostoMarker({ posto }: { posto: Posto }) {
   const menorPreco = posto.precos.length
@@ -9,7 +10,7 @@ export function PostoMarker({ posto }: { posto: Posto }) {
     : null;
 
   return (
-    <Marker position={[posto.latitude, posto.longitude]}>
+    <Marker position={[posto.latitude, posto.longitude]} icon={postoIcon}>
       <Popup>
         <strong>{posto.nome}</strong>
         <br />

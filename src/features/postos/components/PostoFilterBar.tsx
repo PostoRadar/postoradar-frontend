@@ -34,26 +34,23 @@ export function PostoFilterBar({ filtros, onChange }: PostoFilterBarProps) {
     };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        gap: 12,
-        flexWrap: 'wrap',
-        alignItems: 'center',
-        padding: 16,
-        background: 'var(--surface)',
-        borderBottom: '1px solid var(--border)',
-      }}
-    >
-      <div className="field" style={{ marginBottom: 0 }}>
+    <div className="filter-bar">
+      <span className="filter-bar-title">
+        <span className="posto-pin-wrap" aria-hidden style={{ width: 20, height: 20 }}>
+          <span className="posto-pin" style={{ border: '2px solid #fff' }} />
+        </span>
+        Filtros
+      </span>
+
+      <div className="field">
         <label htmlFor="cidade">Cidade</label>
         <input id="cidade" value={filtros.cidade} onChange={handleChange('cidade')} placeholder="Ex: Recife" />
       </div>
-      <div className="field" style={{ marginBottom: 0 }}>
+      <div className="field">
         <label htmlFor="bandeira">Bandeira</label>
         <input id="bandeira" value={filtros.bandeira} onChange={handleChange('bandeira')} placeholder="Ex: Shell" />
       </div>
-      <div className="field" style={{ marginBottom: 0 }}>
+      <div className="field">
         <label htmlFor="combustivel">Combustível</label>
         <select id="combustivel" value={filtros.combustivel} onChange={handleChange('combustivel')}>
           <option value="">Todos</option>
@@ -64,7 +61,7 @@ export function PostoFilterBar({ filtros, onChange }: PostoFilterBarProps) {
           ))}
         </select>
       </div>
-      <div className="field" style={{ marginBottom: 0 }}>
+      <div className="field">
         <label htmlFor="ordenarPor">Ordenar por</label>
         <select id="ordenarPor" value={filtros.ordenarPor} onChange={handleChange('ordenarPor')}>
           <option value="recentes">Mais recentes</option>
@@ -75,11 +72,12 @@ export function PostoFilterBar({ filtros, onChange }: PostoFilterBarProps) {
           <option value="proximidade">Mais próximos</option>
         </select>
       </div>
+
       {filtros.ordenarPor === 'proximidade' && status === 'denied' && (
-        <span className="field-error">Localização negada — mostrando por recentes.</span>
+        <span className="filter-bar-status field-error">Localização negada — mostrando por recentes.</span>
       )}
       {filtros.ordenarPor === 'proximidade' && status === 'loading' && (
-        <span className="muted">Obtendo localização...</span>
+        <span className="filter-bar-status muted">Obtendo localização...</span>
       )}
     </div>
   );

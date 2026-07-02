@@ -1,7 +1,7 @@
 import { MapContainer, Marker, TileLayer } from 'react-leaflet';
-import '../leafletIconFix';
 import type { Coordinates } from '../../../shared/geo/proximity';
 import type { Posto } from '../../postos/types/postos.types';
+import { userLocationIcon } from '../markerIcons';
 import { PostoMarker } from './PostoMarker';
 
 // Recife como fallback: postos ainda não têm filtro de estado/país, mas o
@@ -27,7 +27,12 @@ export function MapView({ postos, userLocation }: MapViewProps) {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {userLocation && <Marker position={[userLocation.latitude, userLocation.longitude]} />}
+      {userLocation && (
+        <Marker
+          position={[userLocation.latitude, userLocation.longitude]}
+          icon={userLocationIcon}
+        />
+      )}
       {postos.map((posto) => (
         <PostoMarker key={posto.id} posto={posto} />
       ))}
