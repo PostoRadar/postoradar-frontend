@@ -6,7 +6,7 @@ function toRad(deg: number): number {
   return (deg * Math.PI) / 180;
 }
 
-function haversineKm(a: Coordinates, b: Coordinates): number {
+export function haversineKm(a: Coordinates, b: Coordinates): number {
   const dLat = toRad(b.latitude - a.latitude);
   const dLon = toRad(b.longitude - a.longitude);
   const lat1 = toRad(a.latitude);

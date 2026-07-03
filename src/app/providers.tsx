@@ -16,11 +16,11 @@ const queryClient = new QueryClient({
 export function AppProviders({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
-      <NotificationsProvider>
-        <AuthProvider>
-          <GeoLocationProvider>{children}</GeoLocationProvider>
-        </AuthProvider>
-      </NotificationsProvider>
+      <AuthProvider>
+        <GeoLocationProvider>
+          <NotificationsProvider>{children}</NotificationsProvider>
+        </GeoLocationProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
