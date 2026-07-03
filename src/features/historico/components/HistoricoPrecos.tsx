@@ -1,3 +1,4 @@
+import { useMemo, useState } from 'react';
 import { useHistoricoQuery } from '../api/historico.queries';
 import { formatBRL } from '../../../shared/utils/currency';
 import { COMBUSTIVEL_LABELS } from '../../../shared/utils/enums';
@@ -28,13 +29,49 @@ function variacao(registro: RegistroHistorico): number | null {
 
 export function HistoricoPrecos({ postoId }: { postoId: string }) {
   const { data: registros, isLoading, isError, error } = useHistoricoQuery(postoId);
+  const [combustivelFiltro, setCombustivelFiltro] = useState<string>('');
+
+  // Combustíveis que de fato aparecem no histórico deste posto — o dropdown só
+  // oferece o que existe, evitando filtros que dariam lista vazia.
+  const combustiveisDisponiveis = useMemo(() => {
+    const tipos = new Set((registros ?? []).map((r) => r.tipoCombustivel));
+    return [...tipos].sort();
+  }, [registros]);
+
+  const registrosFiltrados = useMemo(() => {
+    if (!registros) return [];
+    if (!combustivelFiltro) return registros;
+    return registros.filter((r) => r.tipoCombustivel === combustivelFiltro);
+  }, [registros, combustivelFiltro]);
+
+  const temResultados = registros && registros.length > 0;
 
   return (
     <section className="card">
-      <h2>Histórico de preços</h2>
-      <p className="muted" style={{ marginTop: 4, marginBottom: 16 }}>
-        Cada atualização feita pela comunidade fica registrada aqui.
-      </p>
+      <div className="historico-header">
+        <div>
+          <h2>Histórico de preços</h2>
+          <p className="muted" style={{ marginTop: 4 }}>
+            Cada atualização feita pela comunidade fica registrada aqui.
+          </p>
+        </div>
+        {temResultados && combustiveisDisponiveis.length > 1 && (
+          <label className="historico-filtro">
+            <span className="muted">⛽ Combustível</span>
+            <select
+              value={combustivelFiltro}
+              onChange={(e) => setCombustivelFiltro(e.target.value)}
+            >
+              <option value="">Todos</option>
+              {combustiveisDisponiveis.map((tipo) => (
+                <option key={tipo} value={tipo}>
+                  {rotuloCombustivel(tipo)}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
+      </div>
 
       {isLoading && <Spinner label="Carregando histórico..." />}
 
@@ -44,13 +81,13 @@ export function HistoricoPrecos({ postoId }: { postoId: string }) {
         />
       )}
 
-      {!isLoading && !isError && registros && registros.length === 0 && (
+      {!isLoading && !isError && !temResultados && (
         <div className="results-empty">Ainda não há atualizações registradas para este posto.</div>
       )}
 
-      {!isLoading && !isError && registros && registros.length > 0 && (
+      {!isLoading && !isError && temResultados && (
         <ol className="historico-timeline">
-          {registros.map((registro) => {
+          {registrosFiltrados.map((registro) => {
             const pct = variacao(registro);
             const subiu = registro.precoAntigo !== null && registro.precoNovo > registro.precoAntigo;
             const caiu = registro.precoAntigo !== null && registro.precoNovo < registro.precoAntigo;
