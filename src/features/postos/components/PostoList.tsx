@@ -5,9 +5,10 @@ import { PostoCard } from './PostoCard';
 interface PostoListProps {
   postos: Array<Posto | PostoComDistancia>;
   combustivelFiltrado?: Combustivel;
+  distanciaPorId?: Map<string, number>;
 }
 
-export function PostoList({ postos, combustivelFiltrado }: PostoListProps) {
+export function PostoList({ postos, combustivelFiltrado, distanciaPorId }: PostoListProps) {
   return (
     <div className="results-panel">
       <div className="results-panel-header">
@@ -19,8 +20,17 @@ export function PostoList({ postos, combustivelFiltrado }: PostoListProps) {
         <div className="results-empty">Nenhum posto encontrado com esses filtros.</div>
       ) : (
         <div className="results-list">
-          {postos.map((posto) => (
-            <PostoCard key={posto.id} posto={posto} combustivelFiltrado={combustivelFiltrado} />
+          {postos.map((posto, i) => (
+            <PostoCard
+              key={posto.id}
+              posto={posto}
+              rank={i + 1}
+              combustivelFiltrado={combustivelFiltrado}
+              distanciaKm={
+                distanciaPorId?.get(posto.id) ??
+                ('distanceKm' in posto ? posto.distanceKm : undefined)
+              }
+            />
           ))}
         </div>
       )}
