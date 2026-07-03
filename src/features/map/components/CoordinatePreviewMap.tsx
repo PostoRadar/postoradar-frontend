@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { MapContainer, Marker, TileLayer, useMap } from 'react-leaflet';
 import { postoIcon } from '../markerIcons';
 
@@ -23,6 +23,8 @@ interface CoordinatePreviewMapProps {
  * quando o pino aparece longe do endereço informado.
  */
 export function CoordinatePreviewMap({ latitude, longitude }: CoordinatePreviewMapProps) {
+  const icon = useMemo(() => postoIcon(), []);
+
   return (
     <div
       style={{
@@ -43,7 +45,7 @@ export function CoordinatePreviewMap({ latitude, longitude }: CoordinatePreviewM
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <Marker position={[latitude, longitude]} icon={postoIcon} />
+        <Marker position={[latitude, longitude]} icon={icon} />
         <RecenterOnChange lat={latitude} lon={longitude} />
       </MapContainer>
     </div>

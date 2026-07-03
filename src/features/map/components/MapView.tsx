@@ -33,8 +33,8 @@ export function MapView({ postos, userLocation }: MapViewProps) {
           icon={userLocationIcon}
         />
       )}
-      {postos.map((posto) => (
-        <PostoMarker key={posto.id} posto={posto} />
+      {postos.map((posto, i) => (
+        <PostoMarker key={posto.id} posto={posto} rank={i + 1} />
       ))}
     </MapContainer>
   );

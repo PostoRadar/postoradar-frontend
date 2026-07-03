@@ -624,17 +624,25 @@ textarea {
 .posto-pin-wrap {
   position: relative;
   display: block;
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
 }
 
 .posto-pin {
   position: absolute;
   inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 50%;
   background: var(--grad-brand);
   border: 3px solid #fff;
-  box-shadow: 0 2px 6px rgba(16, 24, 40, 0.35);
+  box-shadow: 0 3px 8px rgba(16, 24, 40, 0.4);
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1;
 }
 
 .posto-pin-ring {
@@ -740,11 +748,13 @@ textarea {
 /* ===== Card de posto na lista ===== */
 .posto-card {
   position: relative;
-  display: block;
+  display: flex;
+  align-items: stretch;
+  gap: 14px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 15px 16px 15px 22px;
+  padding: 16px;
   text-decoration: none;
   color: inherit;
   overflow: hidden;
@@ -755,20 +765,31 @@ textarea {
     border-color 0.16s ease;
 }
 
-.posto-card::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  background: var(--grad-brand);
-}
-
 .posto-card:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
-  border-color: color-mix(in srgb, var(--brand-radar) 45%, var(--border));
+  border-color: color-mix(in srgb, var(--brand-radar) 55%, var(--border));
+}
+
+.posto-card-rank {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--grad-brand);
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 14px;
+  box-shadow: 0 3px 8px -2px rgba(255, 49, 49, 0.4);
+}
+
+.posto-card-body {
+  flex: 1;
+  min-width: 0;
 }
 
 .posto-card-top {
@@ -783,6 +804,7 @@ textarea {
   font-size: 17px;
   font-weight: 600;
   margin: 0;
+  line-height: 1.25;
 }
 
 .posto-card-distance {
@@ -790,18 +812,18 @@ textarea {
   align-items: center;
   gap: 4px;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--brand-radar-ink);
   background: var(--brand-radar-soft);
   border-radius: 999px;
-  padding: 3px 9px;
+  padding: 4px 10px;
   white-space: nowrap;
 }
 
 .posto-card-meta {
   color: var(--text-muted);
   font-size: 13px;
-  margin: 3px 0 12px;
+  margin: 4px 0 14px;
 }
 
 .posto-card-bottom {
@@ -809,13 +831,16 @@ textarea {
   align-items: baseline;
   justify-content: space-between;
   gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
 }
 
 .posto-card-price {
   font-family: var(--font-display);
-  font-size: 21px;
-  font-weight: 600;
+  font-size: 24px;
+  font-weight: 700;
   color: var(--brand-posto);
+  letter-spacing: -0.01em;
 }
 
 /* ===== Detalhe do posto ===== */
