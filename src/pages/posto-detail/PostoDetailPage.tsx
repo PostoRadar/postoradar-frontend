@@ -2,6 +2,7 @@ import { Link, useParams } from 'react-router-dom';
 import { useAuth } from '../../features/auth/context/AuthContext';
 import { usePostoQuery } from '../../features/postos/api/postos.queries';
 import { PrecoForm } from '../../features/postos/components/PrecoForm';
+import { HistoricoPrecos } from '../../features/historico/components/HistoricoPrecos';
 import { ErrorBanner } from '../../shared/components/ErrorBanner';
 import { Spinner } from '../../shared/components/Spinner';
 import { formatBRL } from '../../shared/utils/currency';
@@ -75,6 +76,10 @@ export function PostoDetailPage() {
             </p>
           </section>
         )}
+      </div>
+
+      <div style={{ marginTop: 20 }}>
+        <HistoricoPrecos postoId={posto.id} />
       </div>
     </div>
   );

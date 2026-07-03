@@ -5,6 +5,7 @@ const envSchema = z.object({
   apiUrl: z.string().url(),
   geoApiUrl: z.string().url(),
   notificationsUrl: z.string().url(),
+  historyUrl: z.string().url(),
 });
 
 function loadEnv() {
@@ -13,6 +14,7 @@ function loadEnv() {
     apiUrl: import.meta.env.VITE_API_URL,
     geoApiUrl: import.meta.env.VITE_GEO_API_URL,
     notificationsUrl: import.meta.env.VITE_NOTIFICATIONS_URL,
+    historyUrl: import.meta.env.VITE_HISTORY_URL,
   });
 
   if (!parsed.success) {

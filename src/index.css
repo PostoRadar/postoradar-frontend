@@ -1129,3 +1129,126 @@ textarea {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ===== Histórico de preços (timeline) ===== */
+.historico-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+/* Linha vertical conectando os pontos da timeline */
+.historico-timeline::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  background: var(--border);
+}
+
+.historico-item {
+  position: relative;
+  display: flex;
+  gap: 16px;
+  padding: 0 0 20px 0;
+}
+
+.historico-item:last-child {
+  padding-bottom: 0;
+}
+
+.historico-dot {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  margin-top: 4px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  border: 3px solid var(--surface);
+  box-shadow: 0 0 0 1px var(--border);
+}
+
+.historico-dot--up {
+  background: var(--danger);
+}
+
+.historico-dot--down {
+  background: var(--success);
+}
+
+.historico-dot--flat {
+  background: var(--brand-radar);
+}
+
+.historico-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.historico-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.historico-data {
+  font-size: 12.5px;
+  white-space: nowrap;
+}
+
+.historico-precos {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.historico-antigo {
+  color: var(--text-muted);
+  text-decoration: line-through;
+  font-size: 14px;
+}
+
+.historico-seta {
+  color: var(--text-muted);
+}
+
+.historico-novo {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.historico-var {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.historico-var--up {
+  color: var(--danger);
+  background: #fef2f2;
+}
+
+.historico-var--down {
+  color: var(--success);
+  background: #f0fdf4;
+}
+
+.historico-var--flat {
+  color: var(--brand-radar-ink);
+  background: var(--brand-radar-soft);
+}
+
+.historico-primeiro {
+  font-size: 12.5px;
+}

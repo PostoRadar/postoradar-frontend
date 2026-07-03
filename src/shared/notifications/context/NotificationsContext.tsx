@@ -104,6 +104,9 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
 
     const invalidarPostos = () => {
       queryClient.invalidateQueries({ queryKey: ['postos'] });
+      // O histórico também muda a cada atualização de preço; mantém a tela de
+      // detalhe em dia quando um evento chega em tempo real.
+      queryClient.invalidateQueries({ queryKey: ['historico'] });
     };
 
     socket.on('connect', () => {
