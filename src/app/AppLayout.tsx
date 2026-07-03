@@ -6,40 +6,28 @@ export function AppLayout() {
   const { user, isAuthenticated, logout } = useAuth();
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100svh' }}>
-      <header
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: '14px 24px',
-          borderBottom: '1px solid var(--border)',
-          background: 'var(--surface)',
-          position: 'sticky',
-          top: 0,
-          zIndex: 1000,
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+    <div className="app-shell">
+      <header className="app-header">
+        <div className="app-header-left">
           <Logo size={24} />
-          <Link to="/buscar" className="muted" style={{ textDecoration: 'none', fontWeight: 500 }}>
+          <Link to="/buscar" className="nav-link">
             Buscar postos
           </Link>
         </div>
-        <nav style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+        <nav className="app-nav">
           {isAuthenticated ? (
             <>
-              <Link to="/postos/novo" className="muted" style={{ textDecoration: 'none', fontWeight: 500 }}>
+              <Link to="/postos/novo" className="nav-link">
                 Cadastrar posto
               </Link>
-              <span className="badge">{user?.name}</span>
+              <span className="badge badge-user">{user?.name}</span>
               <button className="btn btn-secondary" onClick={() => void logout()}>
                 Sair
               </button>
             </>
           ) : (
             <>
-              <Link to="/login" className="muted" style={{ textDecoration: 'none', fontWeight: 500 }}>
+              <Link to="/login" className="nav-link">
                 Entrar
               </Link>
               <Link to="/cadastro" className="btn">
@@ -49,7 +37,7 @@ export function AppLayout() {
           )}
         </nav>
       </header>
-      <main style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+      <main className="app-main">
         <Outlet />
       </main>
     </div>

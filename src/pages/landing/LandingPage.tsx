@@ -7,6 +7,12 @@ export function LandingPage() {
   return (
     <div>
       <section className="hero">
+        <div className="hero-rings" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+          <span />
+        </div>
         <h1 className="hero-title">
           <span className="logo-posto">Posto</span>
           <span className="logo-radar">Radar</span>

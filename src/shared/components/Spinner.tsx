@@ -1,3 +1,7 @@
 export function Spinner({ label = 'Carregando...' }: { label?: string }) {
-  return <p className="muted">{label}</p>;
+  return (
+    <div className="spinner" role="status" aria-live="polite">
+      {label}
+    </div>
+  );
 }
