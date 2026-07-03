@@ -57,7 +57,9 @@ export function BuscarPage() {
         {isError && (
           <ErrorBanner message={error instanceof Error ? error.message : 'Erro ao carregar postos.'} />
         )}
-        {!isLoading && !isError && <PostoList postos={postosExibidos} />}
+        {!isLoading && !isError && (
+          <PostoList postos={postosExibidos} combustivelFiltrado={combustivel} />
+        )}
       </div>
     </div>
   );

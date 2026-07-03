@@ -1,8 +1,13 @@
 import type { PostoComDistancia } from '../hooks/useProximitySortedPostos';
-import type { Posto } from '../types/postos.types';
+import type { Combustivel, Posto } from '../types/postos.types';
 import { PostoCard } from './PostoCard';
 
-export function PostoList({ postos }: { postos: Array<Posto | PostoComDistancia> }) {
+interface PostoListProps {
+  postos: Array<Posto | PostoComDistancia>;
+  combustivelFiltrado?: Combustivel;
+}
+
+export function PostoList({ postos, combustivelFiltrado }: PostoListProps) {
   return (
     <div className="results-panel">
       <div className="results-panel-header">
@@ -15,7 +20,7 @@ export function PostoList({ postos }: { postos: Array<Posto | PostoComDistancia>
       ) : (
         <div className="results-list">
           {postos.map((posto) => (
-            <PostoCard key={posto.id} posto={posto} />
+            <PostoCard key={posto.id} posto={posto} combustivelFiltrado={combustivelFiltrado} />
           ))}
         </div>
       )}
